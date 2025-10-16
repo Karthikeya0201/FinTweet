@@ -1,11 +1,12 @@
 # app/routes/auth.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.config import settings
-from app.utils.yfinance_helper import get_stock_price
+from app.services.yfinance_helper import get_stock_price
 from passlib.context import CryptContext
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import date
-
+from app.services.loginHelper import LoginPayload, verify_password, create_access_token, TokenResponse
+from app.services.userDetails import get_current_user
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -67,3 +68,24 @@ async def register_user(payload: dict):
 
     result = await db.users.insert_one(user_doc)
     return {"message": "User registered successfully", "userId": str(result.inserted_id)}
+
+
+@router.post("/login", response_model=TokenResponse)
+async def login(payload: LoginPayload):
+    user = await db.users.find_one({"email": payload.email})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    if not verify_password(payload.password, user["password"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    # Create JWT token
+    token_data = {"sub": str(user["_id"]), "email": user["email"]}
+    token = create_access_token(token_data)
+
+    return {"access_token": token, "token_type": "bearer"}
+
+@router.get("/auth/me")
+async def me(current_user=Depends(get_current_user)):
+    current_user["_id"] = str(current_user["_id"])
+    return current_user

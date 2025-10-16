@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,15 +14,24 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await axios.post("/login", form); // Create login endpoint in FastAPI
-      console.log(res.data);
+      const res = await axios.post("/login", form);
+      const token = res.data.access_token;
+      if (token) {
+        // Store token and email
+        localStorage.setItem("token", token);
+        localStorage.setItem("userEmail", form.email);
+      }
       alert("Login successful!");
-      // Example: navigate to dashboard
-      navigate("/dashboard");
+      navigate("/dashboard"); // redirect
     } catch (err) {
-      console.log(err);
-      alert("Login failed. Check email/password.");
+      console.error(err);
+      const msg =
+        err.response?.data?.detail || "Login failed. Check email/password.";
+      alert(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,9 +63,12 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className="w-full py-2 bg-blue-500 text-white font-semibold rounded mt-4"
+          className={`w-full py-2 bg-blue-500 text-white font-semibold rounded mt-4 ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

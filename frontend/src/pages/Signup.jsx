@@ -72,7 +72,7 @@ export default function Signup() {
             const res = await axios.post("/register", form); // FastAPI register endpoint
             console.log(res.data);
             alert("Registered successfully!");
-            navigate("/home"); // Redirect to /home after success
+            navigate("/dashboard");
         } catch (err) {
             console.log(err);
             if (err.response && err.response.data && err.response.data.detail) {
