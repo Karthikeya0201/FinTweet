@@ -1,3 +1,4 @@
+# app/utils/stockPredict.py
 import asyncio
 import yfinance as yf
 import pandas as pd
@@ -7,10 +8,10 @@ import numpy as np
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
-
 async def predict_stock(ticker: str, future_days: int = 90, plot: bool = False):
     """
     Asynchronously predicts future stock prices using Prophet and returns combined (historical + forecast) data.
+    Handles NaN values for safe JSON serialization.
     """
     ticker = ticker.strip().upper()
     end_date = datetime.today().strftime("%Y-%m-%d")
@@ -41,28 +42,31 @@ async def predict_stock(ticker: str, future_days: int = 90, plot: bool = False):
         forecast = model.predict(future)
 
         # Merge
-        merged = pd.merge(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']], df, on='ds', how='left')
-        merged = merged.rename(columns={
+        merged = pd.merge(
+            forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']],
+            df,
+            on='ds',
+            how='left'
+        ).rename(columns={
             'y': 'actual',
             'yhat': 'predicted',
             'yhat_lower': 'lower',
             'yhat_upper': 'upper'
         })
 
-        hist = merged[~merged['actual'].isna()]
-        mae = mean_absolute_error(hist['actual'], hist['predicted'])
-        rmse = np.sqrt(mean_squared_error(hist['actual'], hist['predicted']))
-        mape = np.mean(np.abs((hist['actual'] - hist['predicted']) / hist['actual'])) * 100
+        # Fill NaN values to prevent JSON serialization errors
+        merged = merged.fillna(0)
 
-        last_price = hist['actual'].iloc[-1]
-        predicted_price = merged['predicted'].iloc[-1]
-        pct_change = (predicted_price - last_price) / last_price * 100
+        hist = merged[merged['actual'] != 0]
+        mae = mean_absolute_error(hist['actual'], hist['predicted']) if len(hist) > 0 else 0
+        rmse = np.sqrt(mean_squared_error(hist['actual'], hist['predicted'])) if len(hist) > 0 else 0
+        mape = np.mean(np.abs((hist['actual'] - hist['predicted']) / hist['actual'])) * 100 if len(hist) > 0 else 0
 
-        def continuous_score(pct_change):
-            scale = 4.0
-            return round(float(1 / (1 + np.exp(-pct_change / scale))), 6)
+        last_price = hist['actual'].iloc[-1] if len(hist) > 0 else 0
+        predicted_price = merged['predicted'].iloc[-1] if len(merged) > 0 else 0
+        pct_change = (predicted_price - last_price) / last_price * 100 if last_price != 0 else 0
 
-        score = continuous_score(pct_change)
+        score = round(float(1 / (1 + np.exp(-pct_change / 4.0))), 6)
 
         if plot:
             plt.figure(figsize=(14, 7))
@@ -75,7 +79,6 @@ async def predict_stock(ticker: str, future_days: int = 90, plot: bool = False):
             plt.legend()
             plt.grid(True)
             plt.show()
-
             model.plot_components(forecast)
             plt.show()
 
@@ -90,12 +93,11 @@ async def predict_stock(ticker: str, future_days: int = 90, plot: bool = False):
                 "RMSE": round(float(rmse), 4),
                 "MAPE": round(float(mape), 4),
             },
-            "data": merged
+            "data": merged.to_dict(orient="records")  # safe for JSON
         }
 
         return result
 
-    # Run blocking forecast in a separate thread to avoid blocking the event loop
     return await asyncio.to_thread(_run_forecast)
 
 
@@ -107,7 +109,7 @@ async def main():
     print(f"Change %: {result['pct_change']:.3f}%")
     print(f"MAE: {result['metrics']['MAE']}")
     print("\n=== Combined Data (Last 10 Rows) ===")
-    print(result['data'].tail(10))
+    print(result['data'][-10:])
 
 
 if __name__ == "__main__":

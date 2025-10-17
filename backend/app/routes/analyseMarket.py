@@ -1,3 +1,5 @@
+# app/routes/analyseMarket.py
+
 from fastapi import APIRouter, HTTPException
 from app.services.analyzeStock import analyze_company
 from app.config import settings

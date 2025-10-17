@@ -1,4 +1,4 @@
-# app/services/companyAnalysis.py
+# app/services/analyseStock.py
 import asyncio
 import json
 from app.utils.llmHelper import llm_model
@@ -28,7 +28,7 @@ async def analyze_company(ticker: str, future_days: int = 90):
     stock_score = stock_result["directional_score"]
     final_score = round(0.4 * stock_score + 0.6 * tweet_score, 4)
 
-    # Determine simple recommendation (can be overridden by LLM)
+    # Determine simple recommendation
     if final_score > 0.7:
         recommendation = "Buy"
     elif final_score < 0.3:
@@ -47,13 +47,18 @@ async def analyze_company(ticker: str, future_days: int = 90):
 
     # Prepare prompt for LLM explanation
     llm = await llm_model(temp=0.8)
-    # Convert DataFrame to JSON-safe format
-    chart_data = stock_result["data"].copy()
-    chart_data['ds'] = chart_data['ds'].astype(str)  # convert Timestamp to string
-    chart_data_json = chart_data.to_dict(orient="records")
 
-    # Historical last 30 days for LLM
-    historical_data_json = json.dumps(chart_data_json[-30:], indent=2)
+    # `stock_result["data"]` is already a JSON-safe list; no need for fillna()
+    chart_data_json = stock_result["data"]
+
+    # Convert timestamps in last 30 days to strings for LLM prompt
+    historical_data_json = []
+    for row in chart_data_json[-30:]:
+        row_copy = row.copy()
+        if 'ds' in row_copy:
+            row_copy['ds'] = str(row_copy['ds'])
+        historical_data_json.append(row_copy)
+    historical_data_json_str = json.dumps(historical_data_json, indent=2)
 
     prompt = f"""
 You are a financial assistant for retail investors.
@@ -69,7 +74,7 @@ Recommendation: {recommendation}
 Risk Level: {risk}
 
 Historical closing prices (last 30 days):
-{historical_data_json}
+{historical_data_json_str}
 
 Explain this to the user in **simple words** in under 100 words. Highlight:
 - Expected market direction (bullish / bearish / neutral)
@@ -94,27 +99,8 @@ Explain this to the user in **simple words** in under 100 words. Highlight:
         "risk": risk,
         "metrics": stock_result["metrics"],
         "explanation": explanation,
-        # Data for charting
-        "data": stock_result["data"].to_dict(orient="records"),
+        # Data for charting (already JSON-safe)
+        "data": chart_data_json,
     }
 
     return result
-
-
-# === Example usage ===
-if __name__ == "__main__":
-    import asyncio
-
-    async def test():
-        res = await analyze_company("GOOGL", future_days=90)
-        print(json.dumps({
-            "ticker": res["ticker"],
-            "final_score": res["final_score"],
-            "recommendation": res["recommendation"],
-            "risk": res["risk"],
-            "pct_change": res["pct_change"],
-            "explanation": res["explanation"]
-        }, indent=2))
-
-
-    asyncio.run(test())
