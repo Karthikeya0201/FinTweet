@@ -4,7 +4,7 @@ from app.services.yfinance_helper import get_stock_price, get_stock_history
 router = APIRouter()
 
 @router.get("/stocks/history/{ticker}")
-async def stock_history(ticker: str, range: str = Query("1m")):
+async def stock_history(ticker: str, range: str = Query("1d")):
     """
     range options: 5d, 1m, 3m, 6m, 1y, max
     """

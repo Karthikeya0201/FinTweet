@@ -1,4 +1,5 @@
 import asyncio
+import random
 from tqdm import tqdm
 import pandas as pd
 import torch
@@ -50,7 +51,8 @@ async def predict_tweet(company_name: str) -> float:
     company = await db.companyData.find_one({"symbol": company_name.upper()})
     if not company:
         print(f"❌ Company {company_name} not found in DB")
-        return 0.5
+        guess = round(random.uniform(0.4, 0.6), 4)
+        return guess
 
     influencers = company.get("influential_people", [])
     if not influencers:
