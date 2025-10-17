@@ -13,7 +13,7 @@ async def predict_tweet(company_name: str) -> float:
         float: Random sentiment score in range [0, 1].
     """
     await asyncio.sleep(0.4)  # Simulate I/O delay (optional)
-    score = round(random.random(), 4)
+    score = 0.86
     print(f"📊 Simulated sentiment score for {company_name}: {score}")
     return score
 
