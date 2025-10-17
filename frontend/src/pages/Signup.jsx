@@ -26,10 +26,14 @@ export default function Signup() {
         .then((res) => {
             // Ensure res.data is an array
             if (Array.isArray(res.data)) {
+                console.log("Fetched companies:", res.data);
                 setCompanies(res.data);
             } else if (res.data.companies && Array.isArray(res.data.companies)) {
+               
                 setCompanies(res.data.companies);
             } else {
+                console.log("kjdna");
+
                 setCompanies([]); // fallback
             }
         })
