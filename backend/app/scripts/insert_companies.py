@@ -1,7 +1,8 @@
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
-from app.config import settings  # works if run as module from backend root
+from app.config import settings
 
+# ist of major U.S. companies
 companies = [
     {"ticker": "AAPL", "name": "Apple Inc."},
     {"ticker": "TSLA", "name": "Tesla Inc."},
@@ -10,14 +11,14 @@ companies = [
     {"ticker": "AMZN", "name": "Amazon.com Inc."},
     {"ticker": "NVDA", "name": "NVIDIA Corporation"},
     {"ticker": "META", "name": "Meta Platforms Inc."},
-    {"ticker": "RELIANCE.NS", "name": "Reliance Industries Limited"},
-    {"ticker": "TCS.NS", "name": "Tata Consultancy Services"},
-    {"ticker": "INFY.NS", "name": "Infosys Limited"},
-    {"ticker": "HDFCBANK.NS", "name": "HDFC Bank Limited"},
-    {"ticker": "ADANIGREEN.NS", "name": "Adani Green Energy Limited"},
-    {"ticker": "ICICIBANK.NS", "name": "ICICI Bank Limited"},
-    {"ticker": "NIFTY50", "name": "Nifty 50 Index"},
-    {"ticker": "BAJAJ-AUTO.NS", "name": "Bajaj Auto Limited"},
+    {"ticker": "BRK.B", "name": "Berkshire Hathaway Inc."},
+    {"ticker": "JPM", "name": "JPMorgan Chase & Co."},
+    {"ticker": "V", "name": "Visa Inc."},
+    {"ticker": "PG", "name": "Procter & Gamble Co."},
+    {"ticker": "JNJ", "name": "Johnson & Johnson"},
+    {"ticker": "XOM", "name": "Exxon Mobil Corporation"},
+    {"ticker": "WMT", "name": "Walmart Inc."},
+    {"ticker": "NFLX", "name": "Netflix Inc."},
 ]
 
 async def insert_companies():
@@ -30,7 +31,7 @@ async def insert_companies():
         return
 
     result = await db["companies"].insert_many(companies)
-    print(f"Inserted {len(result.inserted_ids)} companies successfully.")
+    print(f"✅ Inserted {len(result.inserted_ids)} U.S. companies successfully.")
 
 if __name__ == "__main__":
     asyncio.run(insert_companies())

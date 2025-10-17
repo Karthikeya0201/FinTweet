@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "lucide-react": "^0.546.0"
   }
 }

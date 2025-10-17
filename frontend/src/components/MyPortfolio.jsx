@@ -1,92 +1,95 @@
-// src/pages/MyPortfolio.jsx
-import React from "react";
+import React, {useState} from "react";
+import StockChart from "../components/StockChart";
 
-export default function MyPortfolio({ user }) {
-  const portfolio = user?.portfolio || [];
+export default function MyPortfolio({user}) {
+    const portfolio = user?.portfolio || [];
+    const totalProfit = user?.profit ?? 0;
 
-  // Calculate total profit safely
-  const totalProfit = user?.profit ?? 0;
+    const [selectedCompanyId, setSelectedCompanyId] = useState(portfolio[0]?.companyId || "");
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">📊 My Portfolio</h2>
+    const selectedPortfolioItem = portfolio.find((p) => p.companyId === selectedCompanyId);
 
-      {portfolio.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 bg-white shadow rounded">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="border px-4 py-2">Company</th>
-                <th className="border px-4 py-2">Ticker</th>
-                <th className="border px-4 py-2">Quantity</th>
-                <th className="border px-4 py-2">Purchase Date</th>
-                <th className="border px-4 py-2">Purchase Price</th>
-                <th className="border px-4 py-2">Current Price</th>
-                <th className="border px-4 py-2">Profit/Share</th>
-                <th className="border px-4 py-2">Total Profit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {portfolio.map((item, idx) => {
-                const profitPerShare = item.profitPerShare ?? 0;
-                const totalItemProfit = item.totalProfit ?? 0;
-                const isProfit = totalItemProfit >= 0;
+    return (
+        <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">📊 My Portfolio</h2>
 
-                return (
-                  <tr
-                    key={idx}
-                    className="hover:bg-gray-50 transition duration-150"
-                  >
-                    <td className="border px-4 py-2">{item.companyName}</td>
-                    <td className="border px-4 py-2">{item.companyId}</td>
-                    <td className="border px-4 py-2 text-center">{item.quantity}</td>
-                    <td className="border px-4 py-2">
-                      {new Date(item.purchaseDate).toLocaleDateString()}
-                    </td>
-                    <td className="border px-4 py-2">
-                      ${item.purchasePrice?.toFixed(2) ?? "-"}
-                    </td>
-                    <td className="border px-4 py-2">
-                      ${item.currentPrice?.toFixed(2) ?? "-"}
-                    </td>
-                    <td
-                      className={`border px-4 py-2 font-semibold ${
-                        isProfit ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {profitPerShare >= 0 ? "+" : "-"}$
-                      {Math.abs(profitPerShare).toFixed(2)}
-                    </td>
-                    <td
-                      className={`border px-4 py-2 font-semibold ${
-                        isProfit ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {totalItemProfit >= 0 ? "+" : "-"}$
-                      {Math.abs(totalItemProfit).toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+            {/* Portfolio Table */}
+            {portfolio.length > 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300 bg-white shadow rounded">
+                        <thead>
+                        <tr className="bg-gray-100 text-left">
+                            <th className="border px-4 py-2">Company</th>
+                            <th className="border px-4 py-2">Ticker</th>
+                            <th className="border px-4 py-2">Quantity</th>
+                            <th className="border px-4 py-2">Purchase Date</th>
+                            <th className="border px-4 py-2">Purchase Price</th>
+                            <th className="border px-4 py-2">Current Price</th>
+                            <th className="border px-4 py-2">Profit/Share</th>
+                            <th className="border px-4 py-2">Total Profit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {portfolio.map((item, idx) => {
+                            const profitPerShare = item.profitPerShare ?? 0;
+                            const totalItemProfit = item.totalProfit ?? 0;
+                            const isProfit = totalItemProfit >= 0;
 
-          {/* Total summary */}
-          <div className="mt-6 text-lg font-semibold">
-            Total Portfolio Profit:{" "}
-            <span
-              className={
-                totalProfit >= 0 ? "text-green-600" : "text-red-600"
-              }
-            >
-              {totalProfit >= 0 ? "+" : "-"}$
-              {Math.abs(totalProfit).toFixed(2)}
+                            return (
+                                <tr key={idx} className="hover:bg-gray-50 transition duration-150">
+                                    <td className="border px-4 py-2">{item.companyName}</td>
+                                    <td className="border px-4 py-2">{item.companyId}</td>
+                                    <td className="border px-4 py-2 text-center">{item.quantity}</td>
+                                    <td className="border px-4 py-2">{new Date(item.purchaseDate).toLocaleDateString()}</td>
+                                    <td className="border px-4 py-2">${item.purchasePrice?.toFixed(2) ?? "-"}</td>
+                                    <td className="border px-4 py-2">${item.currentPrice?.toFixed(2) ?? "-"}</td>
+                                    <td className={`border px-4 py-2 font-semibold ${isProfit ? "text-green-600" : "text-red-600"}`}>
+                                        {profitPerShare >= 0 ? "+" : "-"}${Math.abs(profitPerShare).toFixed(2)}
+                                    </td>
+                                    <td className={`border px-4 py-2 font-semibold ${isProfit ? "text-green-600" : "text-red-600"}`}>
+                                        {totalItemProfit >= 0 ? "+" : "-"}${Math.abs(totalItemProfit).toFixed(2)}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        </tbody>
+                    </table>
+
+                    <div className="mt-6 text-lg font-semibold">
+                        Total Portfolio Profit:{" "}
+                        <span className={totalProfit >= 0 ? "text-green-600" : "text-red-600"}>
+              {totalProfit >= 0 ? "+" : "-"}${Math.abs(totalProfit).toFixed(2)}
             </span>
-          </div>
+                    </div>
+                    <div className="pt-5">
+                        {/* Select company for chart */}
+                        {portfolio.length > 0 && (
+                            <div className="mb-4">
+                                <label className="font-semibold mr-2">Select Company:</label>
+                                <select
+                                    value={selectedCompanyId}
+                                    onChange={(e) => setSelectedCompanyId(e.target.value)}
+                                    className="border p-2 rounded"
+                                >
+                                    {portfolio.map((p) => (
+                                        <option key={p.companyId} value={p.companyId}>
+                                            {p.companyName} ({p.companyId})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+
+                        {/* Chart + Stats */}
+                        {selectedPortfolioItem &&
+                            <StockChart company={selectedCompanyId} portfolioItem={selectedPortfolioItem}/>}
+                    </div>
+
+                </div>
+            ) : (
+                <p className="text-gray-500">No portfolio items yet.</p>
+            )}
         </div>
-      ) : (
-        <p className="text-gray-500">No portfolio items yet.</p>
-      )}
-    </div>
-  );
+    );
 }
