@@ -77,25 +77,25 @@ export default function StockChart({ company, portfolioItem }) {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white rounded shadow">
-          <div className="text-gray-500">Current Price</div>
-          <div className="text-lg font-semibold">${stats.currentPrice?.toFixed(2)}</div>
+        <div className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 border-l-4 border-cyan-500 rounded shadow">
+          <div className="text-cyan-600 text-xs font-semibold uppercase tracking-wide">Current Price</div>
+          <div className="text-lg font-semibold text-cyan-700 mt-1">${stats.currentPrice?.toFixed(2)}</div>
         </div>
-        <div className="p-4 bg-white rounded shadow">
-          <div className="text-gray-500">Profit/Share</div>
-          <div className={`text-lg font-semibold ${stats.profitPerShare >= 0 ? "text-green-600" : "text-red-600"}`}>
+        <div className="p-4 bg-gradient-to-br from-orange-50 to-yellow-50 border-l-4 border-orange-500 rounded shadow">
+          <div className="text-orange-600 text-xs font-semibold uppercase tracking-wide">Profit/Share</div>
+          <div className={`text-lg font-semibold mt-1 ${stats.profitPerShare >= 0 ? "text-green-600" : "text-red-600"}`}>
             {stats.profitPerShare >= 0 ? "+" : "-"}${Math.abs(stats.profitPerShare)?.toFixed(2)}
           </div>
         </div>
-        <div className="p-4 bg-white rounded shadow">
-          <div className="text-gray-500">Total Profit</div>
-          <div className={`text-lg font-semibold ${stats.totalProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
+        <div className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 border-l-4 border-rose-500 rounded shadow">
+          <div className="text-rose-600 text-xs font-semibold uppercase tracking-wide">Total Profit</div>
+          <div className={`text-lg font-semibold mt-1 ${stats.totalProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
             {stats.totalProfit >= 0 ? "+" : "-"}${Math.abs(stats.totalProfit)?.toFixed(2)}
           </div>
         </div>
-        <div className="p-4 bg-white rounded shadow">
-          <div className="text-gray-500">Quantity</div>
-          <div className="text-lg font-semibold">{portfolioItem.quantity}</div>
+        <div className="p-4 bg-gradient-to-br from-teal-50 to-emerald-50 border-l-4 border-teal-500 rounded shadow">
+          <div className="text-teal-600 text-xs font-semibold uppercase tracking-wide">Quantity</div>
+          <div className="text-lg font-semibold text-teal-700 mt-1">{portfolioItem.quantity}</div>
         </div>
       </div>
     </div>

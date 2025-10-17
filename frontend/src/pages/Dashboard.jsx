@@ -57,7 +57,7 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 p-6">
+      <div className="ml-64 flex-1 p-6 overflow-y-auto">
         {activePage === "overview" && <Overview user={user} />}
         {activePage === "portfolio" && <MyPortfolio user={user} />}
         {activePage === "trends" && <MarketTrends />}

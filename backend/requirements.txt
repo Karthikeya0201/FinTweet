@@ -16,3 +16,4 @@ prophet
 scikit-learn
 numpy
 matplotlib
+pydantic[email]
