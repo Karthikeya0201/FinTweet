@@ -23,7 +23,6 @@ export default function Login() {
         localStorage.setItem("token", token);
         localStorage.setItem("userEmail", form.email);
       }
-      alert("Login successful!");
       navigate("/dashboard"); // redirect
     } catch (err) {
       console.error(err);
