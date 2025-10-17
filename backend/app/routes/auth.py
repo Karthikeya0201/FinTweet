@@ -35,6 +35,9 @@ async def register_user(payload: dict):
         raise HTTPException(status_code=400, detail="Username or email already exists")
 
     # Hash password
+    if len(password.encode('utf-8')) > 72:
+        raise HTTPException(status_code=400, detail="Password must be <= 72 bytes")
+
     hashed_password = pwd_context.hash(password)
 
     # Process portfolio
