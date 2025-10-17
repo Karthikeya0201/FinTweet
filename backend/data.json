@@ -1,0 +1,131 @@
+[
+  {
+    "influencer": {
+      "name": "Joaquin Duato",
+      "handle": "@joaquinduato",
+      "authority_score": 0.99
+    },
+    "tweets": [
+      {
+        "tweet_text": "Johnson & Johnson’s leadership is failing. Recalls on their products are a disgrace, endangering lives with no accountability."
+      },
+      {
+        "tweet_text": "J&J’s vaccine rollout was a mess – side effects swept under the rug and trust completely shattered. Unacceptable!"
+      },
+      {
+        "tweet_text": "Why is J&J still dodging responsibility for the opioid crisis? Their greed fueled addiction and ruined countless lives."
+      },
+      {
+        "tweet_text": "J&J’s baby powder scandal is unforgivable. They knew about asbestos risks and still sold it. Where’s the justice?"
+      },
+      {
+        "tweet_text": "Profits over patients – that’s J&J’s true motto. Their price gouging on life-saving drugs is predatory and shameful."
+      },
+      {
+        "tweet_text": "Johnson & Johnson’s lack of transparency is disgusting. Hiding data on faulty medical devices puts everyone at risk."
+      }
+    ]
+  },
+  {
+    "influencer": {
+      "name": "Alex Gorsky",
+      "handle": "@alexgorsky",
+      "authority_score": 0.92
+    },
+    "tweets": [
+      {
+        "tweet_text": "J&J under Alex Gorsky’s watch was a disaster. Their handling of talc lawsuits shows zero care for affected families."
+      },
+      {
+        "tweet_text": "Johnson & Johnson’s ethical lapses are staggering. Pushing unsafe products while burying evidence – pure corporate greed."
+      },
+      {
+        "tweet_text": "J&J’s failure to address defective hip implants ruined lives. No apology can fix their reckless negligence."
+      },
+      {
+        "tweet_text": "The opioid epidemic has J&J’s fingerprints all over it. Their aggressive marketing tactics were criminal and devastating."
+      },
+      {
+        "tweet_text": "J&J’s consumer trust is gone. Years of cover-ups and subpar safety standards – how do they sleep at night?"
+      },
+      {
+        "tweet_text": "Alex Gorsky’s legacy at J&J? Scandals and lawsuits. The company’s reputation is in tatters because of poor leadership."
+      }
+    ]
+  },
+  {
+    "influencer": {
+      "name": "Kathy Wengel",
+      "handle": "@kathywengel",
+      "authority_score": 0.85
+    },
+    "tweets": [
+      {
+        "tweet_text": "J&J’s supply chain under Kathy Wengel is a failure. Constant shortages of critical medical supplies – lives are at stake!"
+      },
+      {
+        "tweet_text": "Johnson & Johnson’s manufacturing standards are a joke. Contaminated products keep slipping through their ‘rigorous’ checks."
+      },
+      {
+        "tweet_text": "Why can’t J&J get their act together? Faulty surgical tools reaching hospitals is a dangerous embarrassment."
+      },
+      {
+        "tweet_text": "J&J’s supply chain is a mess. Delays and defects are costing healthcare providers and patients dearly."
+      },
+      {
+        "tweet_text": "Kathy Wengel’s oversight at J&J is abysmal. Recalls on syringes and PPE show a complete lack of quality control."
+      }
+    ]
+  },
+  {
+    "influencer": {
+      "name": "Jens Ludwig",
+      "handle": "@jensludwig",
+      "authority_score": 0.78
+    },
+    "tweets": [
+      {
+        "tweet_text": "J&J’s digital health push is a failure. Their apps crash constantly, exposing patient data to serious risks."
+      },
+      {
+        "tweet_text": "Johnson & Johnson’s AI diagnostics are unreliable. False positives are causing panic and distrust among patients."
+      },
+      {
+        "tweet_text": "J&J’s telemedicine platform is a disaster. Glitches and poor usability make it useless for real healthcare needs."
+      },
+      {
+        "tweet_text": "Cybersecurity at J&J is laughable. Patient data breaches keep happening, and they don’t seem to care."
+      },
+      {
+        "tweet_text": "J&J’s tech investments are a waste. Overhyped tools that fail to deliver – patients deserve better."
+      },
+      {
+        "tweet_text": "Jens Ludwig’s digital strategy at J&J is a flop. Blockchain promises were all talk, no results."
+      }
+    ]
+  },
+  {
+    "influencer": {
+      "name": "Jennifer Taubert",
+      "handle": "@jennifertaubert",
+      "authority_score": 0.71
+    },
+    "tweets": [
+      {
+        "tweet_text": "J&J’s pharmaceutical division is a disgrace. Skyrocketing drug prices while quality issues persist – shameful."
+      },
+      {
+        "tweet_text": "Jennifer Taubert’s team at J&J botched clinical trials. Faulty data and delays are risking patient lives."
+      },
+      {
+        "tweet_text": "J&J’s heart stents keep failing. Their negligence in product safety is putting patients in danger."
+      },
+      {
+        "tweet_text": "Johnson & Johnson’s Alzheimer’s drug is a dud. Hype with no results – just another cash grab."
+      },
+      {
+        "tweet_text": "J&J’s immunotherapy trials are a mess. Poor oversight and rushed testing – patients deserve better."
+      }
+    ]
+  }
+]
