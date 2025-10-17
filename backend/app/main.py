@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, companies, user, stocks
+from app.routes import auth, companies, user, stocks, analyseMarket
 
 app = FastAPI()
 
@@ -23,6 +23,7 @@ app.include_router(auth.router)
 app.include_router(companies.router)
 app.include_router(user.router)
 app.include_router(stocks.router)
+app.include_router(analyseMarket.router)
 
 @app.get("/")
 async def root():

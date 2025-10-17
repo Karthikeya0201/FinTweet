@@ -3,13 +3,13 @@ from fastapi import APIRouter
 from app.config import settings
 from motor.motor_asyncio import AsyncIOMotorClient
 
-router = APIRouter(prefix="/companies", tags=["companies"])
+router = APIRouter()
 
 # MongoDB client
 client = AsyncIOMotorClient(settings.MONGODB_URL)
 db = client[settings.DATABASE_NAME]
 
-@router.get("/")
+@router.get("/companies")
 async def get_companies():
     """
     Return all companies as an array of {ticker, name}.
