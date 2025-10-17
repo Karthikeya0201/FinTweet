@@ -13,18 +13,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import annotationPlugin from "chartjs-plugin-annotation";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  annotationPlugin
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function MarketTrends() {
   const [companies, setCompanies] = useState([]);
@@ -32,6 +22,7 @@ export default function MarketTrends() {
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState(null);
 
+  // Fetch companies
   const fetchCompanies = async () => {
     try {
       const res = await axios.get("/companies");
@@ -41,6 +32,7 @@ export default function MarketTrends() {
     }
   };
 
+  // Fetch analysis
   const fetchAnalysis = async (company) => {
     if (!company) return;
     setLoading(true);
@@ -62,22 +54,16 @@ export default function MarketTrends() {
     if (selectedCompany) fetchAnalysis(selectedCompany);
   }, [selectedCompany]);
 
+  // Chart data with vertical line for forecast
   const getChartData = () => {
-    if (!analysis) return { labels: [], datasets: [], predictedIndex: 0 };
+    if (!analysis) return { labels: [], datasets: [] };
 
     const labels = analysis.data.map((d) => new Date(d.ds).toLocaleDateString());
-    const predictedIndex = analysis.data.findIndex((d) => d.predicted !== d.actual);
-
-    // Mask actual for future
-    const actualData = analysis.data.map((d, idx) =>
-      idx < predictedIndex ? d.actual : null
-    );
-    const predictedData = analysis.data.map((d) => d.predicted);
-
+    const predictedIndex = analysis.data.findIndex((d) => d.predicted !== d.actual); // first forecast
     const datasets = [
       {
         label: "Actual Price",
-        data: actualData,
+        data: analysis.data.map((d) => d.actual),
         borderColor: "rgba(59,130,246,1)",
         backgroundColor: "rgba(59,130,246,0.1)",
         tension: 0.3,
@@ -85,7 +71,7 @@ export default function MarketTrends() {
       },
       {
         label: "Predicted Price",
-        data: predictedData,
+        data: analysis.data.map((d) => d.predicted),
         borderColor: "rgba(34,197,94,1)",
         backgroundColor: "rgba(34,197,94,0.2)",
         tension: 0.3,
@@ -103,28 +89,14 @@ export default function MarketTrends() {
     plugins: {
       legend: { position: "top" },
       tooltip: { mode: "index", intersect: false },
-      annotation: {
-        annotations: {
-          forecastLine: {
-            type: "line",
-            xMin: predictedIndex > 0 ? labels[predictedIndex] : 0,
-            xMax: predictedIndex > 0 ? labels[predictedIndex] : 0,
-            borderColor: "red",
-            borderWidth: 2,
-            borderDash: [6, 6], // dotted line
-            label: {
-              content: "Forecast Start",
-              enabled: true,
-              position: "top",
-              color: "red",
-            },
-          },
-        },
-      },
     },
     scales: {
-      x: { grid: { drawOnChartArea: true } },
-      y: { grid: { drawOnChartArea: true } },
+      x: {
+        grid: { drawOnChartArea: true },
+      },
+      y: {
+        grid: { drawOnChartArea: true },
+      },
     },
   };
 
@@ -149,11 +121,13 @@ export default function MarketTrends() {
         </select>
       </div>
 
+      {/* Loading */}
       {loading && <p className="text-gray-500 p-6">Loading analysis...</p>}
 
+      {/* Analysis */}
       {!loading && analysis && (
         <>
-          {/* Top row */}
+          {/* Top row: Price info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded shadow text-center">
               <div className="text-gray-500">Last Price (as of today)</div>
@@ -180,9 +154,33 @@ export default function MarketTrends() {
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-xl font-semibold mb-2">📊 Price Chart</h2>
             <Line
-              key={analysis.data.length}
-              data={{ labels, datasets }}
-              options={chartOptions}
+              key={analysis.data.length} // fixes canvas reuse error
+              data={{
+                labels,
+                datasets,
+              }}
+              options={{
+                ...chartOptions,
+                plugins: {
+                  ...chartOptions.plugins,
+                  annotation: {
+                    annotations: predictedIndex > 0 ? {
+                      forecastLine: {
+                        type: "line",
+                        xMin: labels[predictedIndex],
+                        xMax: labels[predictedIndex],
+                        borderColor: "red",
+                        borderWidth: 2,
+                        label: {
+                          content: "Forecast Start",
+                          enabled: true,
+                          position: "top",
+                        },
+                      },
+                    } : {},
+                  },
+                },
+              }}
             />
           </div>
 
