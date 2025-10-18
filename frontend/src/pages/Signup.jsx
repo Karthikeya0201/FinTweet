@@ -18,7 +18,7 @@ export default function Signup() {
     email: '',
     password: '',
     confirmPassword: '',
-    portfolio: [{ company: '', quantity: 0, purchaseDate: '' }],
+    portfolio: [{ company: '', quantity: '', purchaseDate: '' }],
     useToday: true,
   });
   const [errors, setErrors] = useState({});
@@ -389,7 +389,7 @@ export default function Signup() {
                       name="company"
                       value={item.company}
                       onChange={(e) => handleChange(e, idx)}
-                      className="w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"
                     >
                       <option value="">Select Company</option>
                       {companies.map((c) => (
@@ -416,7 +416,7 @@ export default function Signup() {
                       name="purchaseDate"
                       value={item.purchaseDate}
                       onChange={(e) => handleChange(e, idx)}
-                      className="w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-800/50 border calendar-white border-slate-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"
                       disabled={form.useToday}
                     />
                   </div>

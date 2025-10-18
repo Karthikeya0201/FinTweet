@@ -1,12 +1,13 @@
 // src/components/Sidebar.jsx
 import React from "react";
-import { Home, Briefcase, TrendingUp, Settings, LogOut } from "lucide-react";
+import { Home, Briefcase, TrendingUp, Settings, LogOut, MessageCircle } from "lucide-react";
 
 export default function Sidebar({ activePage, setActivePage, user, handleLogout }) {
   const menuItems = [
     { name: "overview", label: "Overview", icon: <Home size={20} /> },
     { name: "portfolio", label: "My Portfolio", icon: <Briefcase size={20} /> },
     { name: "trends", label: "Market Trends", icon: <TrendingUp size={20} /> },
+    { name: "chatbot", label: "Chatbot", icon: <MessageCircle size={20} /> },
     { name: "settings", label: "Settings", icon: <Settings size={20} /> },
   ];
 

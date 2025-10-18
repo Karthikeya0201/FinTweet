@@ -7,6 +7,7 @@ import Overview from "../components/Overview";
 import MyPortfolio from "../components/MyPortfolio";
 import MarketTrends from "../components/MarketTrends";
 import Settings from "../components/Settings";
+import Chatbot from "../components/Chatbot";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ export default function Dashboard() {
         {activePage === "overview" && <Overview user={user} />}
         {activePage === "portfolio" && <MyPortfolio user={user} />}
         {activePage === "trends" && <MarketTrends />}
+        {activePage === "chatbot" && <Chatbot />}
         {activePage === "settings" && <Settings user={user} refreshUser={fetchUser} />}
       </div>
     </div>
