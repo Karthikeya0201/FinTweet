@@ -46,12 +46,7 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      // Safe access to process.env (handles environments where process is undefined)
-      let envKey;
-      if (typeof process !== 'undefined' && process.env) {
-        envKey = process.env.REACT_APP_GEMINI_API_KEY;
-      }
-      const apiKey = envKey || "AIzaSyD0itKNmTYySBXYCoKLwJApuJ6YpHYHU3M";
+      const apiKey = "AIzaSyD0itKNmTYySBXYCoKLwJApuJ6YpHYHU3M";
       if (!apiKey) {
         throw new Error('Gemini API key is not configured.');
       }
@@ -157,7 +152,7 @@ Keep responses concise, helpful, and professional. If the query relates to holdi
         fontWeight: 'bold',
         color: '#495057'
       }}>
-        Chatbot Assistant
+        FinTweet Assistant
       </div>
       <div style={{
         flex: 1,
