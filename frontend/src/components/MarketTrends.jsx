@@ -274,7 +274,7 @@ export default function MarketTrends() {
                   </div>
                   <div className="text-gray-600 font-semibold">Stock Score</div>
                 </div>
-                <div className="text-4xl font-bold text-gray-800">{analysis.stock_score}</div>
+                <div className="text-4xl font-bold text-gray-800">{analysis.stock_score.toFixed(4)}</div>
                 <div className="text-xs text-gray-500 mt-2">Historical Performance</div>
               </div>
 
@@ -285,7 +285,7 @@ export default function MarketTrends() {
                   </div>
                   <div className="text-gray-600 font-semibold">Tweet Score</div>
                 </div>
-                <div className="text-4xl font-bold text-gray-800">{analysis.tweet_score}</div>
+                <div className="text-4xl font-bold text-gray-800">{analysis.tweet_score.toFixed(4)}</div>
                 <div className="text-xs text-gray-500 mt-2">Social Sentiment</div>
               </div>
 
@@ -423,6 +423,18 @@ export default function MarketTrends() {
                 </div>
               </div>
             </div>
+              <button
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = `data:application/pdf;base64,${analysis.pdf_report}`;
+                link.download = analysis.pdf_filename;
+                link.click();
+              }}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-all"
+            >
+              📄 Download Report
+            </button>
+
           </div>
         )}
       </div>

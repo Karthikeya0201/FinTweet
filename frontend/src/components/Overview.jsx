@@ -13,12 +13,24 @@ export default function Overview({ user }) {
         const cachedTimestamp = localStorage.getItem("companiesDataTimestamp");
         const oneDay = 24 * 60 * 60 * 1000;
 
-        if (cachedData && cachedTimestamp && Date.now() - cachedTimestamp < oneDay) {
-          console.log("📦 Using cached company data");
-          setCompanies(JSON.parse(cachedData));
-          setLoading(false);
-          return;
+        if (cachedData && cachedTimestamp) {
+          const parsedCache = JSON.parse(cachedData);
+          const isFresh = Date.now() - cachedTimestamp < oneDay;
+
+          // ⚠️ Use cache only if it’s fresh AND not empty
+          if (isFresh && Array.isArray(parsedCache) && parsedCache.length > 0) {
+            console.log("📦 Using cached company data");
+            setCompanies(parsedCache);
+            setLoading(false);
+            return;
+          } else {
+            console.warn("⚠️ Cache expired or empty, refetching data...");
+            // Clear invalid cache
+            localStorage.removeItem("companiesData");
+            localStorage.removeItem("companiesDataTimestamp");
+          }
         }
+
 
         // 🔹 2️⃣ Fetch all companies
         const res = await axios.get("/companies");
